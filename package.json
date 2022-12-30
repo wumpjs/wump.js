@@ -37,7 +37,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "ora": "^6.1.2",
-    "socketio": "^1.0.0",
     "ws": "^8.11.0"
   }
 }
