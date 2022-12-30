@@ -1,2 +1,2 @@
-# wump.js
-a Discord API warper!
+# WumpJS
+- A better and faster, Discord API Wrapper
