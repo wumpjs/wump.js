@@ -1,0 +1,42 @@
+{
+  "name": "wump.js",
+  "private": false,
+  "module": "ESNext",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A better and Faster, Discord API Wrapper. Built with NodeJS",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "api",
+    "discord",
+    "wrapper",
+    "fast",
+    "better"
+  ],
+  "contributors": [
+    {
+      "name": "erqewee",
+      "email": "ceyhunerenerguven.07@outlook.com",
+      "url": "https://github.com/erqewee"
+    },
+    {
+      "name": "MegalithOfficial",
+      "email": "arvearecreative@gmail.com",
+      "url": "https://github.com/MegalithOfficial"
+    },
+    {
+      "name": "Nicat-dcw",
+      "email": "info@nicat-dcw.xyz",
+      "url": "https://github.com/Nicat-dcw"
+    }
+  ],
+  "author": "Erqewee",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "ora": "^6.1.2",
+    "ws": "^8.11.0"
+  }
+}
