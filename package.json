@@ -4,7 +4,7 @@
   "module": "ESNext",
   "type": "module",
   "version": "1.0.0",
-  "description": "A better and Faster, Discord API Wrapper. Built with NodeJS",
+  "description": "🏆 Better, Faster & Simply NodeJS Discord API Wrapper.",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -37,6 +37,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "ora": "^6.1.2",
+    "socketio": "^1.0.0",
     "ws": "^8.11.0"
   }
 }
