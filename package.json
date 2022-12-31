@@ -33,10 +33,11 @@
       "url": "https://github.com/Nicat-dcw"
     }
   ],
-  "author": "Erqewee",
-  "license": "Apache-2.0",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "ora": "^6.1.2",
     "ws": "^8.11.0"
-  }
+  },
+  "author": "Erqewee",
+  "license": "Apache-2.0"
 }
