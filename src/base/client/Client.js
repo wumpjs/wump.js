@@ -2,7 +2,7 @@ import { BaseClient } from "./BaseClient.js";
 
 import { WebSocketManager } from "../websocket/WebSocketManager.js";
 
-export class Client extends BaseClient { 
+export class Client extends BaseClient {
   constructor(token = null, options = {
     failIfNotExists: true,
 
@@ -34,16 +34,17 @@ export class Client extends BaseClient {
     }
   }) {
     super();
-      this.intents = intents;
-      this.shards = shardCount || shards;
-this.token = token;
+
+    this.intents = options?.intents ?? 7;
+    this.shards = options?.shardCount ?? options?.shards;
+    this.token = token;
+
     this.ws = new WebSocketManager(this);
   };
 
   isReady = false;
-  
+
   login() {
-WebSocketManager.connect(this.token, this.shards, this.intents)
-      
+    this.ws.connect(this.token, this.shards, this.intents);
   };
 };
