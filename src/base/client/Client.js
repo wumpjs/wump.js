@@ -27,20 +27,23 @@ export class Client extends BaseClient {
       compress: false,
       large_thresold: 250,
       properties: {
-        browser: "Edge",
-        device: "Edge",
+        browser: "WumpJS",
+        device: "WumpJS",
         os: "Windows"
       }
     }
   }) {
     super();
-
+      this.intents = intents;
+      this.shards = shardCount || shards;
+this.token = token;
     this.ws = new WebSocketManager(this);
   };
 
   isReady = false;
   
   login() {
-
+WebSocketManager.connect(this.token, this.shards, this.intents)
+      
   };
 };
