@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import WebSocket from 'ws';
 import { config } from "dotenv";
 config({ override: true });
@@ -40,6 +40,4 @@ ws.on("open", () => {
 });
 
 ws.on("close", (code, reason) => console.log("[WebSocket] Connection closed | Code: %s, Reason: %s", code, reason));
-ws.on("upgrade", (request) => console.log("8WebSocket] Upgraded. | Request: %s", request));
-=======
->>>>>>> 77d4dab1907cb17467c22bee0d92ec0c5f2e6a2a
+ws.on("upgrade", (request) => console.log("[WebSocket] Upgraded. | Request: %s", request));
