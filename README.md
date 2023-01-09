@@ -8,5 +8,19 @@
 
 <a href="https://www.npmjs.com/package/wump.js"><img src="https://img.shields.io/npm/dt/wump.js.svg?maxAge=3600" alt="Download Count" /></a>
 </div>
+
+### Packages Used;
+[[colorette]](https://npmjs.com/colorette) • for Colorfull Debug Messages
+
+[[ws]](https://npmjs.com/ws) • Interaction with Discord Gateway
+
+[[@wumpjs/storage]](https://npmjs.com/@wumpjs/storage) • for Storage Data
+
+## Installation;
+```sh-session
+$ npm install wump.js
+$ yarn add wump.js
+```
+
 - A better and faster, Discord API Wrapper
 - Starting....
