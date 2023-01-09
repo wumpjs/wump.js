@@ -1,3 +1,5 @@
+<img width="512" src="https://avatars.githubusercontent.com/u/121692661?s=96&v=4"></img>
+
 <h1 width="512" height="512" align="center">WumpJS</p>
 <div align="center">
 <a href="https://discord.gg/FVc4Ha4G7P"><img src="https://img.shields.io/discord/1058766653741084773?color=3437eb&logo=discord&logoColor=blie" alt="Support Server" /></a>
