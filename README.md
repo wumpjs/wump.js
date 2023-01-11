@@ -20,6 +20,7 @@
 ```sh-session
 $ npm install wump.js
 $ yarn add wump.js
+$ pnpm add wump.js
 ```
 
 - A better and faster, Discord API Wrapper
