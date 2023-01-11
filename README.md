@@ -1,4 +1,4 @@
-<center><img width="256" src="https://avatars.githubusercontent.com/u/121692661?s=96&v=4"></img></center>
+<img align="center" width="256" src="https://avatars.githubusercontent.com/u/121692661?s=96&v=4"></img>
 
 <h1 width="512" height="512" align="center">WumpJS</p>
 <div align="center">
