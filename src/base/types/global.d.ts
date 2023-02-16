@@ -112,8 +112,8 @@ declare module "wump.js" {
 
   ///               < TYPES >
 
-  export type ClientBrowser = "Edge" | "Chrome" | "Firefox" | "Opera";
-  export type ClientDevice = "Computer" | "Mobile Device";//benimde aklima geldi
+  export type ClientBrowser = "Edge" | "Chrome" | "Firefox" | "Opera" | "Brave";
+  export type ClientDevice = "Computer" | "Mobile Device" | 'Tablet';//benimde aklima geldi
   export type ClientOS = "Linux" | "Windows" | "MacOS";
   export type ClientStatus = "online" | "dnd" | "idle" | "invisible" | "offline";
   export type ExcludeEnum<T, K extends keyof T> = Exclude<keyof T | T[ keyof T ], K | T[ K ]>;
