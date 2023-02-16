@@ -1,5 +1,9 @@
 import EventEmitter from "node:events";
 
 export class BaseClient extends EventEmitter {
-  constructor() {};
+  constructor() {
+    super({ captureRejections: true });
+
+    this.setMaxListeners(0);
+  };
 };
