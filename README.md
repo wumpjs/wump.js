@@ -1,6 +1,6 @@
 <img align="center" width="256" src="https://avatars.githubusercontent.com/u/121692661?s=96&v=4"></img>
 
-<h1 width="512" height="512" align="center">WumpJS</p>
+<p width="512" height="512" align="center">WumpJS</p>
 <div align="center">
 <a href="https://www.npmjs.com/package/wump.js"><img src="https://img.shields.io/npm/dt/wump.js.svg?maxAge=3600" alt="Download Count" /></a>
 
