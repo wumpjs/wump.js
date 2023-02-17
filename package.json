@@ -42,7 +42,7 @@
     "colorette": "^2.0.19",
     "dotenv": "^16.0.3",
     "ora": "^6.1.2",
-    "ws": "^8.12.0"
+    "ws": "^8.12.1"
   },
   "author": "Erqewee",
   "license": "Apache-2.0"
