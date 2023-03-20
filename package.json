@@ -42,7 +42,7 @@
     "@wumpjs/storage": "^1.1.0",
     "colorette": "^2.0.19",
     "dotenv": "^16.0.3",
-    "ora": "^6.1.2",
+    "ora": "^6.2.0",
     "ws": "^8.12.1"
   },
   "author": "Erqewee",
