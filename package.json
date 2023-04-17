@@ -40,7 +40,7 @@
     "@sapphire/fetch": "^2.4.1",
     "@sapphire/shapeshift": "^3.8.1",
     "@wumpjs/storage": "^1.1.0",
-    "colorette": "^2.0.19",
+    "colorette": "^2.0.20",
     "dotenv": "^16.0.3",
     "ora": "^6.1.2",
     "ws": "^8.12.1"
