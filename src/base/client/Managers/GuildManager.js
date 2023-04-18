@@ -69,7 +69,7 @@ export class GuildManager extends CachedManager {
    * @returns {object[]}
    * @private
    */
-  fetchMembers(data) {
+  fetchMembers(data) {    
     const guild = data;
 
     let result = [];
@@ -77,7 +77,7 @@ export class GuildManager extends CachedManager {
     if (!guild) return result;
 
     for (let index = 0; index < guild.members.length; index++) {
-      const member = guild.members[ index ];
+      const member = guild.members[index];
       const { user, roles, premium_since, pending, nick, mute, joined_at, flags, deaf, communication_disabled_until, avatar } = member;
 
       const memberObject = {
@@ -133,7 +133,7 @@ export class GuildManager extends CachedManager {
     if (!guild) return result;
 
     for (let index = 0; index < guild.channels.length; index++) {
-      const channel = guild.channels[ index ];
+      const channel = guild.channels[index];
       const { name, topic, rate_limit_per_user, position, permission_overwrites, last_pin_timestamp, last_message_id, id, flags, default_thread_rate_limit_per_user } = channel;
 
       const channelObject = {
@@ -175,14 +175,14 @@ export class GuildManager extends CachedManager {
     if (!guild) return result;
 
     for (let index = 0; index < guild.stickers.length; index++) {
-      const sticker = guild.stickers[ index ];
+      const sticker = guild.stickers[index];
       const { id, pack_id, name, description, tags: _tags, type, format_type, available, guild_id, user, sort_value } = sticker;
 
       const splittedTags = String(_tags).split(",");
       const tags = [];
 
       for (let i = 0; i < splittedTags.length; i++) {
-        const tag = splittedTags[ i ];
+        const tag = splittedTags[i];
 
         tags.push(tag);
       };

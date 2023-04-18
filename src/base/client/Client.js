@@ -4,13 +4,14 @@ import Status from "../types/enums/client/Status.js";
 import Events from "./WebSocket/events/Events.js";
 import { s } from "@sapphire/shapeshift";
 import { GuildManager } from "./Managers/GuildManager.js";
+import { ChannelManager } from "./Managers/ChannelManager.js";
 import { config } from "dotenv";
 import { Intents } from "./BitFields/Intents.js";
 
 const defaultOptions = {
   failIfNotExists: false,
 
-  intents: 64 * 64,
+  intents: 3276799,
   partials: [],
 
   shards: 1,
@@ -91,6 +92,12 @@ export class Client extends BaseClient {
      * @readonly
      */
     this.guilds = new GuildManager(this);
+
+    /**
+     * Client Channels
+     * @readonly
+     */
+    this.channels = new ChannelManager(this);
   };
 
   /**
@@ -103,8 +110,8 @@ export class Client extends BaseClient {
    * Connect to Gateway.
    * @returns {this}
    */
-  get login() {
-    if (this.status === Status.Ready) return this;
+  login() {
+    if (this.status === Status.Ready) return null;
 
     this.ws.connect();
 
@@ -144,10 +151,7 @@ export class Client extends BaseClient {
   fetchToken() {
     config({ override: true });
 
-    let token = null;
-
-    if (process.env[ "TOKEN" ]) token = process.env[ "TOKEN" ];
-    else if (this.token) token = this.token;
+    let token = (process.env["TOKEN"] ?? this.token);
 
     return token;
   };

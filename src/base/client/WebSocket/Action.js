@@ -21,24 +21,25 @@ export class ActionManager {
   /**
    * Event List
    * @readonly
+   * @protected
    */
   Events = Events;
 
   /**
    * Action.
    * @param {object} data 
-   * @returns {void}
-   * @private
+   * @returns {Promise<void>}
+   * @protected
    */
-  execute(data) {
+  async execute(data) {
     return data;
   };
 
   /**
    * Emit client.
-   * @param {object[]} data
+   * @param {...any} data
    * @returns {void}
-   * @private
+   * @protected
    */
   send(...data) {
     this.client.emit(this.toString(), ...data);

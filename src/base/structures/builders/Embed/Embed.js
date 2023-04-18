@@ -2,7 +2,6 @@ import { s } from "@sapphire/shapeshift";
 import { BaseBuilder } from "../BaseBuilder.js";
 
 import ColorObject from "./ColorObject.js";
-import EmbedObject, { AuthorObject, FieldObject, FooterObject, ProviderObject, ImageObject, VideoObject, ThumbnailObject } from "./EmbedObject.js";
 
 /**
  * Embed Builder
@@ -12,222 +11,266 @@ import EmbedObject, { AuthorObject, FieldObject, FooterObject, ProviderObject, I
  */
 export class Embed extends BaseBuilder {
   /**
-   * @param {?EmbedObject} data 
+   * @param {(embed: Embed) => Embed} data 
    * @constructor
    */
   constructor(data) {
     super(data);
+
+    this.setType("rich");
   };
 
   /**
-   * Set title of embed.
+   * Set title of Embed.
    * @param {string} title 
    * @returns {this}
    */
   setTitle(title) {
     s.string.parse(title);
 
-    this.data.title = title;
+    this.define({ title });
 
     return this;
   };
 
   /**
-   * Set type of embed.
-   * @param {string} type 
-   * @returns {this}
-   * @protected
-   */
-  setType(type) {
-    s.string.parse(type);
-
-    this.data.type = type;
-
-    return this;
-  };
-
-  /**
-   * Set description of embed.
+   * Set description of Embed.
    * @param {string} content
    * @returns {this}
    */
   setDescription(content) {
-    s.string.parse(content);
+    content = String(content);
 
-    if (content.length > 4095) throw new RangeError(`Embed 'description' is bigger than '4095'.`);
+    if (content.length < 1) throw new RangeError(`Embed 'description' is must be bigger than '0'.`);
+    if (content.length > 4096) throw new RangeError(`Embed 'description' is bigger than '4096'.`);
 
-    this.data.description = content;
+    this.define({ description: content });
 
     return this;
   };
 
   /**
-   * Set title url of embed.
-   * @param {string} target
+   * Set title url of Embed.
+   * @param {string} url
    * @returns {this}
    */
-  setURL(target) {
-    s.string.parse(target);
+  setURL(url) {
+    s.string.parse(url);
 
-    this.data.url = target;
+    this.define({ url });
 
     return this;
   };
 
   /**
-   * Set footer timestamp of embed.
+   * Set footer timestamp of Embed.
    * @param {number} time 
    * @returns {this}
    */
   setTimestamp(time = Date.now()) {
     s.number.parse(time);
 
-    this.data.timestamp = time;
+    this.define({ timestamp: time });
 
     return this;
   };
 
   /**
-   * Set color of embed.
+   * Set color of Embed.
    * @param {string} color 
    * @returns {this}
    */
   setColor(color) {
     s.string.parse(color);
 
-    if (!ColorObject?.[ color ]) throw new ReferenceError(`'${color}' is not a valid embed color.`);
+    if (!ColorObject?.[color]) throw new ReferenceError(`'${color}' is not a valid embed color.`);
 
-    this.data.color = ColorObject[ color ];
+    this.define({ color: ColorObject[color] });
 
     return this;
   };
 
   /**
-   * Set footer of embed.
-   * @param {FooterObject} options 
+   * Set footer of Embed.
+   * @param {import("./Options").FooterObject} options 
    * @returns {this}
    */
   setFooter(options) {
     if (typeof options !== "object") throw new Error(`'${options}' is not a valid Object.`);
 
-    this.data.footer = options;
+    this.define({
+      footer: {
+        icon_url: options?.iconURL,
+        proxy_icon_url: options?.proxyIconURL,
+        text: options?.text
+      }
+    });
 
     return this;
   };
 
   /**
-   * Set image of embed.
-   * @param {ImageObject} options 
+   * Set image of Embed.
+   * @param {import("./Options").ImageObject} options 
    * @returns {this}
    */
   setImage(options) {
     if (typeof options !== "object") throw new Error(`'${options}' is not a valid Object.`);
 
-    this.data.image = options;
+    this.define({
+      image: {
+        url: options?.url,
+        height: options?.height,
+        proxy_url: options?.proxyURL,
+        width: options?.width
+      }
+    });
 
     return this;
   };
 
   /**
-   * Set thumbnail of embed.
-   * @param {ThumbnailObject} options 
+   * Set thumbnail of Embed.
+   * @param {import("./Options").ThumbnailObject} options 
    * @returns {this}
    */
   setThumbnail(options) {
     if (typeof options !== "object") throw new Error(`'${options}' is not a valid Object.`);
 
-    this.data.thumbnail = options;
+    this.define({
+      thumbnail: {
+        url: options?.url,
+        height: options?.height,
+        proxy_url: options?.proxyURL,
+        width: options?.width
+      }
+    });
 
     return this;
   };
 
   /**
-   * Set video of embed.
-   * @param {VideoObject} options 
+   * Set video of Embed.
+   * @param {import("./Options").VideoObject} options 
    * @returns {this}
-   * @protected
+   * @private
    */
   setVideo(options) {
     if (typeof options !== "object") throw new Error(`'${options}' is not a valid Object.`);
 
-    this.data.video = options;
+    this.define({
+      video: {
+        url: options?.url,
+        height: options?.height,
+        proxy_url: options?.proxyURL,
+        width: options?.width
+      }
+    });
 
     return this;
   };
 
   /**
-   * Set provider of embed.
-   * @param {ProviderObject} options 
+   * Set provider of Embed.
+   * @param {import("./Options").ProviderObject} options 
    * @returns {this}
-   * @protected
+   * @private
    */
   setProvider(options) {
     if (typeof options !== "object") throw new Error(`'${options}' is not a valid Object.`);
 
-    this.data.provider = options;
+    this.define({ provider: options });
 
     return this;
   };
 
   /**
-   * Set author of embed.
-   * @param {AuthorObject} options 
+   * Set author of Embed.
+   * @param {import("./Options").AuthorObject} options 
    * @returns {this}
    */
   setAuthor(options) {
     if (typeof options !== "object") throw new Error(`'${options}' is not a valid Object.`);
 
-    this.data.author = options;
+    this.define({
+      author: {
+        name: options?.name,
+        icon_url: options?.iconURL,
+        proxy_icon_url: options?.proxyIconURL,
+        url: options?.url
+      }
+    });
 
     return this;
   };
 
   /**
-   * Set fields of embed.
-   * @param {FieldObject[]} fields 
+   * Set fields of Embed.
+   * @param {...(import("./Options").FieldObject)} fields 
    * @returns {this}
    */
-  setFields(fields = this.data?.fields) {
+  setFields(...fields) {
     if (!Array.isArray(fields)) throw new TypeError(`'${fields}' is not Array.`);
 
-    let size = 0;
-    const queue = [];
+    const queue = this.query(fields, (setMax, field, index) => {
+      setMax(index, 25);
 
-    for (let index = 0; index < fields.length; index++) {
-      if (size > 25) break;
+      return {
+        name: String(field?.name),
+        value: String(field?.value),
+        inline: field?.inline ?? false
+      };
+    });
 
-      const field = fields[ index ];
-      queue.push({ name: String(field?.name), value: String(field?.value), inline: field?.inline ?? false });
-
-      size++;
-    };
-
-    if (this.data?.fields) for (let index = 0; index < queue.length; index++) this.data?.fields.push(queue[ index ]);
-    else this.data.fields = queue;
+    this.define({ fields: queue });
 
     return this;
   };
 
   /**
-   * Converts Embed to readable object.
-   * @returns {?EmbedObject}
+   * Add fields to Embed.
+   * @param {...(import("./Options").FieldObject)} fields
+   * @returns {this}
    */
-  toJSON() {
-    return this.data;
+  addFields(...fields) {
+    if (!Array.isArray(fields)) throw new TypeError(`'${fields}' is not Array.`);
+
+    const data = this.toJSON();
+    if (data?.fields?.length > 25) throw new RangeError("DataLimitExceeded", `Maximum embed size is '25'`);
+
+    const queue = this.query(fields, (setMax, field, index) => {
+      setMax(index, 25);
+
+      return {
+        name: String(field?.name),
+        value: String(field?.value),
+        inline: field?.inline ?? false
+      };
+    });
+
+    this.define({ fields: queue, overWrite: true });
+
+    return this;
   };
 
   /**
-   * Creates a new Embed from JSON data.
-   * @param {Embed} embed 
-   * @returns {Embed}
-   * @static
+   * Add field to Embed.
+   * @param {string} name
+   * @param {any} value
+   * @param {boolean} inline
+   * @returns {this}
    */
-  static direct(embed) {
-    let data;
+  addField(name, value, inline = false) {
+    s.boolean.parse(inline);
 
-    if (embed?.toJSON) data = new this(embed.toJSON());
-    else data = new this(embed);
+    const data = this.toJSON();
+    if (data?.fields?.length > 25) throw new RangeError("DataLimitExceeded", `Maximum embed size is '25'`);
 
-    return data;
+    name = String(name);
+    value = String(value);
+
+    this.define({ fields: { name, value, inline }, overWrite: true });
+
+    return this;
   };
 };

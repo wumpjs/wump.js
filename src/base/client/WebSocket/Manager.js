@@ -10,10 +10,8 @@ import { s } from "@sapphire/shapeshift";
 
 import { readdirSync } from "node:fs";
 import { URL } from "node:url";
-const eventsPath = (new URL("./events/default", import.meta.url).pathname).substring(1);
-
-import { Storage } from "@wumpjs/storage";
-const eventsData = new Storage(128);
+import { ActionManager } from "./Action.js";
+const eventsPath = (new URL("./events/dist", import.meta.url).pathname).substring(1);
 
 import OpCodes from "../../types/enums/gateway/OpCodes.js";
 import ClientStatus from "../../types/enums/client/Status.js";
@@ -25,7 +23,7 @@ export class WebSocketManager extends EventEmitter {
    * @constructor
    */
   constructor(client) {
-    super();
+    super({ captureRejections: true });
 
     /**
      * WebSocket Events
@@ -35,28 +33,31 @@ export class WebSocketManager extends EventEmitter {
 
     /**
      * WumpJS Client
+     * @type {Client}
      * @readonly
      */
     this.client = client;
 
     /**
      * WebSocket Setup
-     * @readonly
+     * @type {WebSocket}
      * @protected
      */
-    this.ws = new WebSocket(this.createGatewayURL());
+    this.ws = new WebSocket(this.createGatewayURL(), { perMessageDeflate: false });
 
     /**
      * WebSocket Status
+     * @type {boolean}
      * @readonly
      */
     this.status = null;
 
     /**
-     * Sequence
+     * Packet queue
+     * @type {Array<{ name: string, action: ActionManager }>}
      * @protected
      */
-    this.sequence = -1;
+    this.packetQueue = [];
   };
 
   /**
@@ -94,7 +95,7 @@ export class WebSocketManager extends EventEmitter {
 
     s.string.parse(token);
 
-    const options = (this.client?.options ? this.client.options : this.client.defaultOptions);
+    const options = (this.client?.options ?? this.client.defaultOptions);
 
     let heartbeatInterval;
 
@@ -108,21 +109,19 @@ export class WebSocketManager extends EventEmitter {
 
       this.send(json);
 
-      readdirSync(eventsPath).filter((event) => event.endsWith(".js")).map(async (event) => {
-        const action = new (await import(`./events/default/${event}`)).default(this.client);
+      const actions = readdirSync(eventsPath).filter((event) => event.endsWith(".js"));
+      for (let index = 0; index < actions.length; index++) {
+        const event = actions[index];
 
-        return eventsData.set(event.split(".js")[0], action);
-      });
+        /**
+         * @type {ActionManager}
+         */
+        const action = (new ((await import(`./events/dist/${event}`)).default)(this.client));
+
+        this.packetQueue.push({ name: (event.split(".js")[0]), action });
+      };
 
       this.status = ClientStatus.Ready;
-    });
-
-    this.ws.on(this.Events.Error, (code, reason) => {
-      clearInterval(heartbeatInterval);
-
-      this.status = ClientStatus.NotConnected;
-
-      throw new Error(code, String(reason));
     });
 
     this.ws.on(this.Events.Message, async (data) => {
@@ -132,11 +131,25 @@ export class WebSocketManager extends EventEmitter {
       if (op === OpCodes.Hello) heartbeatInterval = this.heartbeat(d.heartbeat_interval);
 
       if (t) {
-        const action = eventsData.fetch(t);
-        if (!action) return;
+        const packets = this.packetQueue.filter((packet) => packet.name === t);
 
-        action.execute(d);
+        for (let index = 0; index < packets.length; index++) {
+          const packet = packets[index];
+
+          packet.action.execute(d).then(() => {
+            const getIndex = packets.indexOf({ name: packet.name, action: packet.action });
+            if (getIndex > -1) packets.splice(getIndex, (getIndex + 1));
+          }).catch(console.error);
+        };
       };
+    });
+
+    this.ws.on(this.Events.Error, (code, reason) => {
+      clearInterval(heartbeatInterval);
+
+      this.status = ClientStatus.NotConnected;
+
+      throw new Error(code, String(reason));
     });
 
     this.ws.on(this.Events.Close, (code, reason) => console.log(`Error[${code}]: ${reason ?? "None"}`));
@@ -155,7 +168,7 @@ export class WebSocketManager extends EventEmitter {
     let interval = setInterval(() => {
       this.send({ op: OpCodes.HeartBeat, d: null });
       console.log("HeartBeat sended.");
-    }, (time)).unref();
+    }, time).unref();
 
     return interval;
   };

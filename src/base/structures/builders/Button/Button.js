@@ -1,46 +1,40 @@
 import { s } from "@sapphire/shapeshift";
 import { BaseBuilder } from "../BaseBuilder.js";
 
-import ButtonObject from "./ButtonObject.js";
-
 /**
  * Button Builder
  * @extends BaseBuilder
  * @external
- * @see {@link https://discord.com/developers/docs/interactions/message-components#button-object}
+ * @see {@link https://discord.com/developers/docs/interactions/message-components#button-object Discord#MessageComponents.Buttons.ButtonObject}
  */
 export class Button extends BaseBuilder {
   /**
-   * @param {?ButtonObject} data 
+   * @param {(button: Button) => void} data 
    * @constructor
    */
   constructor(data) {
     super(data);
-  };
 
-  /**
-   * Set type of button.
-   * @param {number} type 
-   * @returns {this}
-   * @protected
-   */
-  setType(type) {
-    s.number.parse(type);
-
-    this.data.type = type;
-
-    return this;
+    this.setType(2); 
   };
 
   /**
    * Set style of button.
-   * @param {string} style 
+   * @param {number | string | import("./Options").ButtonStyles} style 
    * @returns {this}
    */
-  setStyle(style) {
-    s.string.parse(style);
+  setStyle(style = 1) {
+    if (typeof style === "string") {
+      style = style.toLowerCase();
 
-    this.data.style = style;
+      if (style === "primary") style = 1;
+      else if (style === "secondary") style = 2;
+      else if (style === "success") style = 3;
+      else if (style === "danger") style = 4;
+      else if (style === "link") style = 5;
+    };
+
+    this.define({ style });
 
     return this;
   };
@@ -53,20 +47,20 @@ export class Button extends BaseBuilder {
   setLabel(label) {
     s.string.parse(label);
 
-    this.data.label = label;
+    this.define({ label });
 
     return this;
   };
 
   /**
    * Set emoji of button.
-   * @param {EmojiObject} options 
+   * @param {import("./Options").EmojiObject} options 
    * @returns {this}
    */
   setEmoji(options) {
     if (typeof options !== "object") throw new Error(`'${options}' is not a valid Object.`);
 
-    this.data.emoji = options;
+    this.define({ emoji: options });
 
     return this;
   };
@@ -79,7 +73,10 @@ export class Button extends BaseBuilder {
   setID(id) {
     s.string.parse(id);
 
-    this.data.custom_id = (id ?? this.data?.customId);
+    const data = this.toJSON();
+    if (data?.url) throw new Error("InvalidUsage", `You are cannot use URL with Custom ID.`);
+
+    this.define({ custom_id: id });
 
     return this;
   };
@@ -90,46 +87,57 @@ export class Button extends BaseBuilder {
    * @returns {this}
    */
   setURL(url) {
-    s.string.parse(id);
+    s.string.parse(url);
 
-    this.data.url = url;
+    const data = this.toJSON();
+    if (data?.custom_id) throw new Error("InvalidUsage", `You are cannot use Custom ID with URL.`);
+
+    this.define({ url });
 
     return this;
   };
 
   /**
-   * Set state of button.
+   * Set the button to be on or off.
    * @param {boolean} state 
    * @returns {this}
    */
   setDisabled(state = true) {
     s.boolean.parse(state);
 
-    this.data.enabled = state;
+    this.define({ disabled: state });
 
     return this;
   };
 
   /**
-   * Converts Button to readable object.
-   * @returns {?ButtonObject}
+   * Set the button to be on or off.
+   * @param {boolean} state 
+   * @returns {this}
    */
-  toJSON() {
-    return this.data;
-  };
+  setEnabled(state = true) {
+    s.boolean.parse(state);
 
-  /**
-   * Creates a new Button from JSON data.
-   * @param {Button} button
-   * @returns {Button}
-   * @static
-   */
-  static direct(button) {
-    let data;
+    this.define({ disabled: state ? false : state });
 
-    if (button?.toJSON) data = new this(button.toJSON());
-    else data = new this(button);
-
-    return data;
+    return this;
   };
 };
+
+import { fetch, FetchMethods } from "@sapphire/fetch";
+import { Row } from "../ActionRow/ActionRow.js";
+
+const button = new Button((btn) => btn.setID("a").setLabel("test").setStyle(1));
+const row = new Row({ components: [button] });
+
+fetch("https://discord.com/api/v10/channels/1058768052902178826/messages", {
+  method: FetchMethods.Post,
+  headers: {
+    Authorization: "Bot MTAzMzcxNDkzNzQyOTc3MDI2MA.GUMB8F.PtbL--G9H1gXTTWw3qCriLzt9_dLbkvwV60a_s",
+    "Content-Type": "application/json"
+  },
+  body: {
+    content: "test",
+    components: [row]
+  }
+})

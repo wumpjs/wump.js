@@ -1,6 +1,6 @@
 import { Client } from './base/client/Client.js';
-new Client().login
+const client = new Client().login();
 
-  .on("ready", () => console.log("Ready!"));
+client.once("ready", () => console.log("Ready!"));
 
-
+client.on("message", console.log);

@@ -44,7 +44,7 @@ export class CachedManager extends BaseManager {
    * Creates new Cache.
    * @param {number} size 
    * @returns {Storage<any>}
-   * @private
+   * @protected
    */
   createCache(size) {
     const cache = this.createStorage(size);
