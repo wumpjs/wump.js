@@ -123,21 +123,3 @@ export class Button extends BaseBuilder {
     return this;
   };
 };
-
-import { fetch, FetchMethods } from "@sapphire/fetch";
-import { Row } from "../ActionRow/ActionRow.js";
-
-const button = new Button((btn) => btn.setID("a").setLabel("test").setStyle(1));
-const row = new Row({ components: [button] });
-
-fetch("https://discord.com/api/v10/channels/1058768052902178826/messages", {
-  method: FetchMethods.Post,
-  headers: {
-    Authorization: "Bot MTAzMzcxNDkzNzQyOTc3MDI2MA.GUMB8F.PtbL--G9H1gXTTWw3qCriLzt9_dLbkvwV60a_s",
-    "Content-Type": "application/json"
-  },
-  body: {
-    content: "test",
-    components: [row]
-  }
-})
