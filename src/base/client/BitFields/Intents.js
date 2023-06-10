@@ -21,8 +21,32 @@ export class Intents extends BitField {
    */
   static Flags = IntentsFlags;
 
-  /**
-   * Intents
+  /** 
    * @readonly
    */
-};
+  static PRIVILEGED = {
+    GUILD_PRESENCES: true,
+    GUILD_MEMBERS: true,
+    MESSAGE_CONTENT: true,
+  };
+
+  /**
+   * Calculates intents
+   * @param  {...Intents} intents 
+   * @returns {Number}
+   */
+  calculateIntents(...intents) {
+    return intents.reduce((acc, intent) => acc | (1 << intent), 0);
+  }
+
+  /**
+   * Is intent Privileged.
+   * @param {Intents} intent 
+   * @returns 
+   */
+  isPrivileged(intent) {
+    return !!Object.prototype.hasOwnProperty.call(this.constructor.PRIVILEGED, intent);
+  }
+}
+
+console.log(new Intents().calculateIntents(IntentsFlags.Intents.GuildMessages, IntentsFlags.Intents.GuildInvites))

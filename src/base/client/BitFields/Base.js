@@ -20,9 +20,7 @@ export class BitField {
      * Bit Fields
      * @readonly
      */
-    this.data = [];
-
-    for (let index = 0; index < bitfields.length; index++) this.data.push(this.resolve(bitfields[ index ]));
+    this.data = bitfields.reduce((acc, bitfield) => acc | this.constructor.resolve(bitfield), 0);
   };
 
   /**
@@ -30,34 +28,35 @@ export class BitField {
    */
   static Flags = {};
 
-  add(...bitfield) {
-    // nasıl deniyoruz komut ne ne komutu direkt intents'i başlattım node ile tmm console access ver pls
-    for (const bit of bits) {
-
+  add(...bitfields) {
+    for (const bitfield of bitfields) {
+      this.data |= this.constructor.resolve(bitfield);
     }
-  };
+  }
 
-  remove(...bitfield) {
-
-  };
+  remove(...bitfields) {
+    for (const bitfield of bitfields) {
+      this.data &= ~this.constructor.resolve(bitfield);
+    }
+  }
 
   has(bitfield) {
-
-  };
+    return (this.data & this.constructor.resolve(bitfield)) !== 0;
+  }
 
   toJSON() {
-    return (typeof this.bitfields === 'number' ? this.bitfields : this.bitfields.toString());
-  };
+    return this.data;
+  }
 
   static resolve(bitfield) {
     if (typeof bitfield === 'string') {
-      if (bitfield in this.constructor?.Flags) {
-        return this.constructor?.Flags[ bitfield ];
+      if (bitfield in this.Flags) {
+        return this.Flags[bitfield];
       }
       throw new Error(`Invalid bitfield: ${bitfield}`);
     } else if (typeof bitfield === 'number') {
       return bitfield;
     }
     throw new Error(`Invalid bitfield: ${bitfield}`);
-  };
-};
+  }
+}
